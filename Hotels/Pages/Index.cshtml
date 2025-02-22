@@ -1,0 +1,110 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Hotel search";
+}
+<div class="container mt-5">
+    <h2>Hotel Management</h2>
+    <div class="row">
+        <div class="col-4">
+            <button class="btn btn-success mb-3" onclick="openCreateModal()">Create New Hotel</button>
+        </div>
+        <div class="col-4">
+            <label for="latitude">Your latitude:</label>
+            <input type="number" id="latitude" name="latitude" placeholder="Enter latitude">
+        </div>
+        <div class="col-4">
+            <label for="longitude">Your longitude:</label>
+            <input type="number" id="longitude" name="longitude" placeholder="Enter longitude">
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Distance</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="hotelTableBody"></tbody>
+        </table>
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Hotel</h5>
+                <button type="button" class="close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editHotelId">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="editName">
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" class="form-control" id="editPrice">
+                </div>
+                <div class="form-group">
+                    <label>Latitude</label>
+                    <input type="number" class="form-control" id="editLatitude">
+                </div>
+                <div class="form-group">
+                    <label>Longitude</label>
+                    <input type="number" class="form-control" id="editLongitude">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveChanges()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Hotel</h5>
+                <button type="button" class="close" onclick="closeCreateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" id="createName">
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" class="form-control" id="createPrice">
+                </div>
+                <div class="form-group">
+                    <label>Latitude</label>
+                    <input type="number" class="form-control" id="createLatitude">
+                </div>
+                <div class="form-group">
+                    <label>Longitude</label>
+                    <input type="number" class="form-control" id="createLongitude">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
+                <button type="button" class="btn btn-success" onclick="createHotel()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
