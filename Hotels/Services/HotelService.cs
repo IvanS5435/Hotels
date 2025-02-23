@@ -23,6 +23,7 @@ namespace Hotels.Services
         public HotelsTable GetAll(int pageId, int pageSize)
         {
             var hotels = _hotelRepository.GetAll()
+                .OrderBy(h => h.Price)
                 .Skip((pageId - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -38,7 +39,8 @@ namespace Hotels.Services
         public HotelsTable GetByDistance(int pageId, int pageSize, double latitude, double longitude)
         {
             var hotels = _hotelRepository.GetAll()
-                .OrderBy(h => GetDistance(h.Latitude, h.Longitude, latitude, longitude))  // Sort by distance
+                .OrderBy(h=>h.Price)
+                .ThenBy(h => GetDistance(h.Latitude, h.Longitude, latitude, longitude))  // Sort by distance
                 .Skip((pageId - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();

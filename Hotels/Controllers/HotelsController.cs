@@ -1,5 +1,6 @@
 ﻿using Hotels.Services;
 using Hotels.ViewData;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,39 +13,61 @@ namespace Hotels.Controllers
         private readonly IHotelService _hotelService;
         private readonly int pageSize = 5;
 
-        public HotelsController(IHotelService hotelService) {
+        public HotelsController(IHotelService hotelService)
+        {
             _hotelService = hotelService;
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateHotel([FromBody] HotelCreate hotel)
         {
             return Ok(_hotelService.Add(hotel));
         }
 
         [HttpGet]
-        public IActionResult GetHotels(int page = 1,double latitude=0, double longitude=0)
+        public IActionResult GetHotels(int page = 1, double? latitude = null, double? longitude = null)
         {
-            return Ok(_hotelService.GetByDistance(page, pageSize, latitude, longitude));
+            if (latitude.HasValue && longitude.HasValue)
+            {
+                return Ok(_hotelService.GetByDistance(page, pageSize, latitude.Value, longitude.Value));
+            }else
+            {
+                return Ok(_hotelService.GetAll(page, pageSize));
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateHotel(int id, [FromBody] HotelCreate hotelData)
         {
-            return Ok(_hotelService.Update(id, hotelData));
+            try
+            {
+                return Ok(_hotelService.Update(id, hotelData));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteHotel(int id)
         {
-            var hotelDeleted = _hotelService.Delete(id);
-            if (hotelDeleted)
+            try
             {
-                return Ok("Hotel deleted successfully");
+                var hotelDeleted = _hotelService.Delete(id);
+                if (hotelDeleted)
+                {
+                    return Ok("Hotel deleted successfully");
+                }
+                else
+                {
+                    return BadRequest("Hotel deleted failed");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("Hotel deleted failed");
+                return BadRequest(ex.Message);
             }
 
         }

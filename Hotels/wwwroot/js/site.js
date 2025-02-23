@@ -10,7 +10,16 @@ function loadHotels(page) {
     var longitude = $('#longitude').val();
 
     console.log(page, latitude, longitude);
-    $.get(`/api/hotels?page=${page}&latitude=${latitude}&longitude=${longitude}`, function (data) {
+    var url = `/api/hotels?page=${page}`;
+
+    if (!((latitude === null || latitude === undefined || latitude === '') ||
+        (longitude === null || longitude === undefined || longitude === ''))) {
+        console.log('valid');
+        url += `&latitude=${latitude}`;
+        url += `&longitude=${longitude}`;
+    }
+
+    $.get(url, function (data) {
         let rows = '';
         $.each(data.hotels, function (index, hotel) {
             rows += `<tr>
@@ -19,7 +28,7 @@ function loadHotels(page) {
                         <td>${hotel.price}</td>
                         <td>${hotel.latitude}</td>
                         <td>${hotel.longitude}</td>
-                        <td>${hotel.distance}</td>
+                        <td>${hotel.distance ?? 'N/A'}</td>
                         <td>
                             <button class='btn btn-primary' onclick='openEditModal(${hotel.id}, "${hotel.name}", ${hotel.price}, ${hotel.latitude}, ${hotel.longitude})'>Update</button>
                         </td>

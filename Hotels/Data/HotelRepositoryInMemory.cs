@@ -31,6 +31,7 @@ namespace Hotels.Data
                 existingHotel.Price = hotel.Price;
                 existingHotel.Latitude = hotel.Latitude;
                 existingHotel.Longitude = hotel.Longitude;
+                return;
             }
 
             throw new KeyNotFoundException("Hotel not found");
@@ -42,8 +43,8 @@ namespace Hotels.Data
             if (hotel != null)
             {
                 _hotels.Remove(hotel);
+                return;
             }
-
 
             throw new KeyNotFoundException("Hotel not found");
         }
